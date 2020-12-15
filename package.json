@@ -1,0 +1,40 @@
+{
+  "name": "blender_batch_renderer",
+  "version": "3.0.0",
+  "description": "An application to make bat files for blender rendering",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "pack": "build --dir",
+    "dist": "build"
+  },
+  "build": {
+    "appId": "com.blogspot.ameenvengara",
+    "win": {
+      "target": "nsis",
+      "icon": "build/icon.ico"
+    },
+    "linux": {
+      "target": [
+        "deb",
+        "AppImage"
+      ]
+    }
+  },
+  "repository": "",
+  "keywords": [
+    "Electron",
+    "blender",
+    "batch",
+    "renderer"
+  ],
+  "author": "AmeenVGA",
+  "license": "CC0-1.0",
+  "devDependencies": {
+    "electron": "^2.0.8",
+    "electron-builder": "^20.28.3"
+  },
+  "dependencies": {
+    "chokidar": "^2.0.4"
+  }
+}

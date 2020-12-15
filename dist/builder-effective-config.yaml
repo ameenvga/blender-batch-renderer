@@ -1,0 +1,12 @@
+directories:
+  output: dist
+  buildResources: build
+appId: com.blogspot.ameenvengara
+win:
+  target: nsis
+  icon: build/icon.ico
+linux:
+  target:
+    - deb
+    - AppImage
+electronVersion: 2.0.8

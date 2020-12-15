@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+
+    <title>Blender Batch Renderer</title>
+    <link  rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+      <style>
+          input.checkbox  {  
+             width : 1em ; 
+             height : 1em ;    
+            }
+          body{
+              background: #d8d9de;
+              padding:0px 15px;
+              font-family: sans-serif;
+              font-size: 13px;
+          }
+          h1{
+              font-size: 20px;
+          }
+
+          #blenderFilesContainer{
+              background: #fff;
+              height: 300px;
+              width: 100%;
+              overflow-y: scroll;
+          }
+          .icons{
+              width: auto;
+              height: 16px;
+              margin-right: 5px;
+              padding-right: 4px;
+              border-right: 1px solid black;
+          }
+
+          .batchFileItem{
+              display: flex;
+              padding: 3px;
+          }
+          #statusBar{
+              color: red;
+              font-weight: bold
+          }
+          #blenderSelector{
+              width: 100%;
+              display: flex;
+          }
+          #blenderPath{
+              width: 80%;
+          }
+          #browseButton{
+              width: 20%
+          }
+          #bottomBtns{
+            display: flex;
+            width: 100%;
+          }
+          #bottomBtns>button{
+            width: 100%;
+          }
+          #mainContainer>div{
+            margin-top: 10px;
+          }
+          button{
+            background: #62a7ff;
+            color: #fff;
+          }
+          #blenderPath, button{
+            height: 30px;
+            border-radius: 3px;
+            border: 1px solid #d8d9de;
+            font-size: 1em;
+          }
+          #blenderPath{
+              padding-left: 5px;
+          }
+          *, *::before, *::after {
+            box-sizing: border-box;
+          }
+          #blenderLogo{
+              position: absolute;
+              top: 10px;
+              right: 20px;
+              height: 60px;
+          }
+         table{
+             width: 100%;
+             background:white;
+             border-collapse: collapse;
+
+         }
+         th{
+             background: rgb(161, 163, 168);
+             border: 2px solid rgb(93, 93, 93);
+             max-height: 12px;
+             user-select: none;
+         }
+         td,th {
+            border: 1px solid #ddd;
+            padding: 5px; 
+         }
+         tr:nth-child(even){background-color: #f2f2f2;}
+
+         tr:hover {background-color: #ddd;}
+      </style>
+  </head>
+  <body onload="loadPreferences()">
+    <h1>Blender Batch Renderer 1.0.0</h1>
+      <img src="assets/blenderLogo.svg" draggable=false id="blenderLogo"/>
+    <div id="mainContainer">
+        <p>Where is your Blender source file?</p>
+        <div id="blenderSelector">
+            <input type="text" id="blenderPath"/>
+            <button id="browseButton" class="bbrBtns" onclick="openBlenderFile()" >Browse</button>
+            </div>
+
+        <div id="DragSection" >
+            <p>Drag and drop your blender files below</p>
+  
+                <table id="blenderFilesContainer">
+                    <thead>
+                        <th>Filename</th>
+                        <th>Start</th>
+                        <th>End</th>
+                    </thead>
+                   <tbody>
+                       <tr>
+                           <td>Ameen</td>
+                           <td>Ameen</td>
+                           <td>Ameen</td>
+                       </tr>
+                   </tbody>
+                </table>
+                <!-- <table id="blenderFilesContainer">
+
+                    <div class="batchFileItem">
+                        <img class="icons" draggable="false" src="assets/deleteIcon.png"/>
+                        <div class="blfilename">E:/blenderProject/Sh_015.blend</div>
+                    </div>
+                </table> -->
+                </div>
+        <div id="shutDownSelector">
+            <input type="checkbox" name="shutdown" value="yes" id="shutCheck"><label for="shutCheck">Shut down my PC after rendering completion</label>
+            </div>
+        <div id="bottomBtns" >
+            <button class="bbrBtns" onclick="loadBatFile()">Load</button>
+            <button class="bbrBtns" onclick="saveBatFile()" >Save</button>
+            <button class="bbrBtns"onclick="renderBatch()" >Render</button>
+            <button class="bbrBtns"onclick="resetAll()" >Reset</button>
+            </div>
+        <div id="statusBar"></div>
+      </div>
+
+  </body>
+<!-- <script src="js/filehandling.js"></script> -->
+    <script src="js/variables.js"></script>
+    <script src="js/loadPreference.js"></script>
+    <script src="js/setBlenderSource.js"></script>
+    <script src="js/bottomButtonHandling.js"></script>
+</html>
