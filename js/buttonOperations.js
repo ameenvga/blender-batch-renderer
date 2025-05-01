@@ -1,22 +1,21 @@
 function openBlenderFile () {
     console.log('openBlenderFile')
-    dialog.showOpenDialog({ filters: [
-
-        {name: 'blender file'}
-
-        ]}, (filenames) => {
-        if(filenames === undefined) {
-            return
-        }
-        else{
+    dialog.showOpenDialog({ 
+        properties: ['openFile'],
+        filters: [
+            {name: 'blender file'}
+        ]
+    }).then(result => {
+        if (!result.canceled && result.filePaths.length > 0) {
             console.log("Selected Blender Source")
-            var openedfilename = filenames[0];
+            var openedfilename = result.filePaths[0];
             blenderPath.value = openedfilename
             localStorage.setItem('blenderSource', openedfilename)
             dataChanged()
         }
+    }).catch(err => {
+        console.log(err)
     });
-
   }
 
      shutChecker.addEventListener('click', shutDownSwitch)
@@ -227,16 +226,19 @@ function openOutputFolder(){
 
     dialog.showOpenDialog({
         properties: ['openDirectory']
-    },function(path){
-        if(path){
+    }).then(result => {
+        if (!result.canceled && result.filePaths.length > 0) {
+            var path = result.filePaths[0];
             document.getElementById('outputPath').value = path
             // Start to watch the selected path
             StartWatcher(path)
             dataChanged()
             document.getElementById('renderDiv').style.display = 'flex'
-        }else {
+        } else {
             console.log("No path selected");
         }
+    }).catch(err => {
+        console.log(err)
     });
 }
 
