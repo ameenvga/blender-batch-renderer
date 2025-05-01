@@ -8,6 +8,7 @@ const FileService = require('./services/FileService');
 const RenderService = require('./services/RenderService');
 const UIService = require('./services/UIService');
 const StorageService = require('./services/StorageService');
+const ErrorService = require('./services/ErrorService').default;
 
 // Import UI components
 const TableComponent = require('./components/TableComponent');
@@ -28,6 +29,30 @@ const tableComponent = new TableComponent(
 );
 const dialogComponent = new DialogComponent(fileService);
 const statusComponent = new StatusComponent(document.getElementById('statusBar'));
+
+// Create global namespace for application
+window.app = {
+  fileService,
+  renderService,
+  uiService,
+  storageService,
+  tableComponent,
+  dialogComponent,
+  statusComponent,
+  errorService: ErrorService
+};
+
+// Set up global error handler
+window.addEventListener('error', (event) => {
+  ErrorService.handleError(event.error || event.message, 'Window', 'error', true);
+  event.preventDefault();
+});
+
+// Set up unhandled promise rejection handler
+window.addEventListener('unhandledrejection', (event) => {
+  ErrorService.handleError(event.reason, 'Promise', 'error', true);
+  event.preventDefault();
+});
 
 // Load saved preferences
 document.addEventListener('DOMContentLoaded', () => {
@@ -61,11 +86,15 @@ function setupDragAndDropListeners() {
     event.preventDefault();
     event.stopPropagation();
     
-    const files = event.dataTransfer.files;
-    for (let i = 0; i < files.length; i++) {
-      if (files[i].path.endsWith('.blend')) {
-        tableComponent.addBlendFile(files[i].path);
+    try {
+      const files = event.dataTransfer.files;
+      for (let i = 0; i < files.length; i++) {
+        if (files[i].path.endsWith('.blend')) {
+          tableComponent.addBlendFile(files[i].path);
+        }
       }
+    } catch (error) {
+      ErrorService.handleError(error, 'DragAndDrop', 'error', true);
     }
   });
   
@@ -81,64 +110,96 @@ function setupDragAndDropListeners() {
 function setupButtonListeners() {
   // Browse button for Blender executable
   document.getElementById('browseButton').addEventListener('click', () => {
-    dialogComponent.openBlenderFile();
+    try {
+      dialogComponent.openBlenderFile();
+    } catch (error) {
+      ErrorService.handleError(error, 'BrowseButton', 'error', true);
+    }
   });
   
   // Browse button for output folder
   document.querySelector('#outPutFolderSelector #browseButton').addEventListener('click', () => {
-    dialogComponent.openOutputFolder();
+    try {
+      dialogComponent.openOutputFolder();
+    } catch (error) {
+      ErrorService.handleError(error, 'OutputFolderButton', 'error', true);
+    }
   });
   
   // Open folder button
   document.getElementById('openFolderButton').addEventListener('click', () => {
-    dialogComponent.showOutputFolder();
+    try {
+      dialogComponent.showOutputFolder();
+    } catch (error) {
+      ErrorService.handleError(error, 'OpenFolderButton', 'error', true);
+    }
   });
   
   // Load button
   document.querySelector('#bottomBtns button:nth-child(1)').addEventListener('click', () => {
-    dialogComponent.loadBatFile();
+    try {
+      dialogComponent.loadBatFile();
+    } catch (error) {
+      ErrorService.handleError(error, 'LoadButton', 'error', true);
+    }
   });
   
   // Save button
   document.querySelector('#bottomBtns button:nth-child(2)').addEventListener('click', () => {
-    fileService.saveBatFile();
+    try {
+      fileService.saveBatFile();
+    } catch (error) {
+      ErrorService.handleError(error, 'SaveButton', 'error', true);
+    }
   });
   
   // Render button
   document.querySelector('#bottomBtns button:nth-child(3)').addEventListener('click', () => {
-    renderService.renderBatch();
+    try {
+      renderService.renderBatch();
+    } catch (error) {
+      ErrorService.handleError(error, 'RenderButton', 'error', true);
+    }
   });
   
   // New button
   document.querySelector('#bottomBtns button:nth-child(4)').addEventListener('click', () => {
-    fileService.newSlate();
+    try {
+      fileService.newSlate();
+    } catch (error) {
+      ErrorService.handleError(error, 'NewButton', 'error', true);
+    }
   });
   
   // Shutdown checkbox
   document.getElementById('shutCheck').addEventListener('click', () => {
-    renderService.updateShutdownOption();
+    try {
+      renderService.updateShutdownOption();
+    } catch (error) {
+      ErrorService.handleError(error, 'ShutdownCheckbox', 'error', true);
+    }
   });
   
   // Core input change
   document.getElementById('coreInput').addEventListener('input', () => {
-    renderService.updateCoreCount();
+    try {
+      renderService.updateCoreCount();
+    } catch (error) {
+      ErrorService.handleError(error, 'CoreInput', 'error', true);
+    }
   });
   
   // Output path change
   document.getElementById('outputPath').addEventListener('input', () => {
-    if (document.getElementById('outputPath').value.trim() === '') {
-      uiService.resetOutputPath();
+    try {
+      if (document.getElementById('outputPath').value.trim() === '') {
+        uiService.resetOutputPath();
+      }
+    } catch (error) {
+      ErrorService.handleError(error, 'OutputPath', 'error', true);
     }
   });
 }
 
 // Export the initialized services for use in other modules if needed
-module.exports = {
-  fileService,
-  renderService,
-  uiService,
-  storageService,
-  tableComponent,
-  dialogComponent,
-  statusComponent
-};
+module.exports = window.app;
