@@ -1,17 +1,25 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Blender Batch Renderer</title>
-    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="../../css/styles.css" />
   </head>
   <body onload="window.app.init()">
-    <h1>Blender Batch Renderer 3.0.0</h1>
-    <img src="../../assets/blenderLogo.svg" draggable=false id="blenderLogo"/>
+    <h1>Blender Batch Renderer 4.0.0</h1>
+    <img
+      src="../../assets/blenderLogo.svg"
+      draggable="false"
+      id="blenderLogo"
+    />
     <div id="mainContainer">
       <p>Where is your Blender source file?</p>
       <div id="blenderSelector">
-        <input type="text" id="blenderPath" placeholder="Where is your blender source file?"/>
+        <input
+          type="text"
+          id="blenderPath"
+          placeholder="Where is your blender source file?"
+        />
         <button id="browseButton" class="bbrBtns">Browse</button>
       </div>
 
@@ -32,36 +40,47 @@
           </table>
         </div>
       </div>
-      
+
       <div id="outPutFolderSelector">
-        <input type="text" id="outputPath" placeholder="Set your main output folder here"/>
+        <input
+          type="text"
+          id="outputPath"
+          placeholder="Set your main output folder here"
+        />
         <button id="browseButton" class="bbrBtns">Browse</button>
         <button id="openFolderButton" class="bbrBtns">Open</button>
       </div>
-      
+
       <div id="coreSelector">
-        <div>Number of cores </div> 
-        <input type="number" id="coreInput">
-        <input type="checkbox" name="shutdown" value="yes" id="shutCheck"><label for="shutCheck">Shut down my PC after rendering completion</label>
+        <div>Number of cores</div>
+        <input type="number" id="coreInput" />
+        <input
+          type="checkbox"
+          name="shutdown"
+          value="yes"
+          id="shutCheck"
+        /><label for="shutCheck"
+          >Shut down my PC after rendering completion</label
+        >
       </div>
-      
+
       <div id="bottomBtns">
         <button class="bbrBtns" id="loadButton">Load</button>
         <button class="bbrBtns" id="saveButton">Save</button>
         <button class="bbrBtns" id="renderButton">Render</button>
         <button class="bbrBtns" id="newButton">New</button>
       </div>
-      
+
       <div id="statusBar">Welcome!</div>
-      
+
       <div id="renderDiv">
         <div id="newRenderDiv">
-          <img id="renderPreview" src="../../assets/preview.svg"/> 
+          <img id="renderPreview" src="../../assets/preview.svg" />
         </div>
-        
-        <div style="margin-left: 10px;">
-          <h4 style="margin: 0;">Details:</h4>
-          <h3 id="fileNameDiplay" style="margin: 0;">your_file_name.blend</h3>
+
+        <div style="margin-left: 10px">
+          <h4 style="margin: 0">Details:</h4>
+          <h3 id="fileNameDiplay" style="margin: 0">your_file_name.blend</h3>
           <h1 id="frameNumberDisplay">00000</h1>
           <div id="currentFrame">full/path/of/the/rendered/frame.ext</div>
         </div>
@@ -72,16 +91,16 @@
     <script>
       // Create global app namespace
       window.app = {};
-      
+
       // Initialize function will be called when the page loads
-      window.app.init = function() {
+      window.app.init = function () {
         // Import the renderer process modules
-        const renderer = require('./index.js');
-        
+        const renderer = require("./index.js");
+
         // Assign the services and components to the global app namespace
         Object.assign(window.app, renderer);
-        
-        console.log('Application initialized');
+
+        console.log("Application initialized");
       };
     </script>
   </body>
