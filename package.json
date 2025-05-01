@@ -2,11 +2,12 @@
   "name": "blender_batch_renderer",
   "version": "3.0.0",
   "description": "An application to make bat files for blender rendering",
-  "main": "main.js",
+  "main": "src/main/index.js",
   "scripts": {
     "start": "electron .",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder"
+    "dist": "electron-builder",
+    "dev": "electron . --dev"
   },
   "build": {
     "appId": "com.blogspot.ameenvengara",

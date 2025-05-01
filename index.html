@@ -2,223 +2,192 @@
 <html>
   <head>
     <meta charset="UTF-8">
-
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';">
     <title>Blender Batch Renderer</title>
-
-      <style>
-          input.checkbox  {  
-             width : 1em ; 
-             height : 1em ;    
-            }
-          body{
-              background: #d8d9de;
-              padding:0px 15px;
-              font-family: sans-serif;
-              font-size: 13px;
-          }
-          h1{
-              font-size: 20px;
-          }
-
-
-          .icons{
-              width: auto;
-              height: 16px;
-              margin-right: 5px;
-              padding-right: 4px;
-              border-right: 1px solid black;
-          }
-
-          .batchFileItem{
-              display: flex;
-              padding: 3px;
-          }
-          #statusBar{
-              color: red;
-              font-weight: bold
-          }
-          #blenderSelector, #outPutFolderSelector{
-              width: 100%;
-              display: flex;
-          }
-          #blenderPath, #outputPath{
-              width: 80%;
-          }
-          #browseButton, #openFolderButton{
-              width: 20%
-          }
-          #bottomBtns{
-            display: flex;
-            width: 100%;
-          }
-          #bottomBtns>button{
-            width: 100%;
-          }
-          #mainContainer>div{
-            margin-top: 10px;
-          }
-          button{
-            background: #62a7ff;
-            color: #fff;
-          }
-          #blenderPath, button{
-            height: 30px;
-            border-radius: 3px;
-            border: 1px solid #d8d9de;
-            font-size: 1em;
-          }
-          #blenderPath{
-              padding-left: 5px;
-          }
-          *, *::before, *::after {
-            box-sizing: border-box;
-          }
-          #blenderLogo{
-              position: absolute;
-              top: 10px;
-              right: 20px;
-              height: 60px;
-          }
-         #tableContainer{
-             width: 100%;
-             height: 40vh;
-             background: #fff;
-             overflow-y: scroll;
-             
-         }
-         .endFrame, .startFrame{
-             width: 100%;
-         }
-         table {
-            border-collapse: collapse;
-            width: 100%;
-            table-layout: fixed;
-            padding-right: 5px;
-        }
-        th{
-            background: rgb(165, 166, 167);
-            height: 25px;
-        }
-        table, th, td {
-            white-space: nowrap;
-            overflow: hidden;
-        }
-        tbody tr:nth-child(even) {background-color: #f2f2f2;}
-        .filename{
-            width: 60vw;
-        }
-        
-         #coreSelector{
-             display: flex;
-             align-items: center
-         }
-         #coreInput{
-             margin-left: 10px;
-             width: 100px;
-             height: 30px;
-         }
-         .serialNumber, .checkFinish{
-             width: 20px;
-         }
-        .endFrame, .startFrame
-        {
-            background-color: rgba(127, 255, 212, 0);
-            border: 1px solid rgba(0, 0, 0, 0.16);
-        }
-        .lozad{
-            width: 200px;;
-            height: 112px;
-        }
-        #renderDiv{
-            display: none;
-            background: white;
-            padding: 5px;
-        }
-        #renderPreview{
-            width: 200px;
-            height: 112px;
-        }
-        #currentFrame{
-            word-break: break-all
-        }
-      </style>
+    <link rel="stylesheet" href="css/styles.css">
   </head>
-  <body onload="loadPreferences()">
+  <body>
     <h1>Blender Batch Renderer 3.0.0</h1>
-      <img src="assets/blenderLogo.svg" draggable=false id="blenderLogo"/>
+    <img src="assets/blenderLogo.svg" draggable=false id="blenderLogo"/>
     <div id="mainContainer">
-        <p>Where is your Blender source file?</p>
-        <div id="blenderSelector">
-            <input type="text" id="blenderPath" placeholder="Where is your blender source file?"/>
-            <button id="browseButton" class="bbrBtns" onclick="openBlenderFile()" >Browse</button>
-            </div>
+      <p>Where is your Blender source file?</p>
+      <div id="blenderSelector">
+        <input type="text" id="blenderPath" placeholder="Where is your blender source file?"/>
+        <button id="browseButton" class="bbrBtns">Browse</button>
+      </div>
 
-        <div id="DragSection" >
-            <p>Drag and drop your blender files below</p>
-  
-            <div id="tableContainer">
-                    <table>
-                        <tr>
-                            <th class="checkFinish">?</th>
-                            <th class="serialNumber">No.</th>
-                            <th class="filename">Filename</th>
-                            <th>Start</th>
-                            <th>End</th>
-                        </tr>
-                        <tbody id="tableTbody" onchange="tableDataChanged()">
-                            <!-- <tr>
-                                <td> <div class="batchFileItem">
-                                        <img class="icons" draggable="false" src="assets/deleteIcon.png"/>
-                                        <div class="blfilename">E:/blenderProject/Sh_015.blend</div>
-                                    </div></td>
-                                <td contenteditable="true"></td>
-                                <td contenteditable="true"></td>
-                            </tr> -->
-
-                        </tbody>
-                    </table>
-            </div>
- 
-                </div>
-        <div id="outPutFolderSelector">
-            <input type="text" id="outputPath" placeholder="Set your main output folder here"/>
-            <button id="browseButton" class="bbrBtns" onclick="openOutputFolder()" >Browse</button>
-            <button id="openFolderButton" class="bbrBtns" onclick="showOutputFolder()" >Open</button>
-            </div>
-        <div id="coreSelector">
-            <div>Number of cores </div> 
-            <input type="number"  id="coreInput" onclick="dataChanged()"  >
-            <input type="checkbox" name="shutdown" value="yes" id="shutCheck"><label for="shutCheck">Shut down my PC after rendering completion</label>
-
-        </div>
-        <!-- <div id="shutDownSelector">
-            </div> -->
-        <div id="bottomBtns" >
-            <button class="bbrBtns" onclick="console.log('Load button clicked'); loadBatFile()">Load</button>
-            <button class="bbrBtns" onclick="console.log('Save button clicked'); saveBatFile()" >Save</button>
-            <button class="bbrBtns" onclick="console.log('Render button clicked'); renderBatch()" >Render</button>
-            <button class="bbrBtns" onclick="console.log('New button clicked'); newSlate()" >New</button>
-            </div>
-        <div id="statusBar">Welcome!</div>
-        <div  id="renderDiv" >
-            <div id="newRenderDiv">
-                    <img id="renderPreview"   src="assets/preview.svg"/> 
-            </div>
-            
-            <!-- src="assets/preview.svg" -->
-            <div style="margin-left: 10px;" >
-                <h4 style="margin: 0;">Details:</h4>
-                <h3 id="fileNameDiplay" style="margin: 0;">your_file_name.blend</h3>
-                <h1 id="frameNumberDisplay">00000</h1>
-                <div id="currentFrame">full/path/of/the/rendered/frame.ext</div>
-            </div>
+      <div id="DragSection">
+        <p>Drag and drop your blender files below</p>
+        <div id="tableContainer">
+          <table>
+            <tr>
+              <th class="checkFinish">?</th>
+              <th class="serialNumber">No.</th>
+              <th class="filename">Filename</th>
+              <th>Start</th>
+              <th>End</th>
+            </tr>
+            <tbody id="tableTbody">
+              <!-- Table content will be dynamically generated -->
+            </tbody>
+          </table>
         </div>
       </div>
+      
+      <div id="outPutFolderSelector">
+        <input type="text" id="outputPath" placeholder="Set your main output folder here"/>
+        <button id="browseButton" class="bbrBtns">Browse</button>
+        <button id="openFolderButton" class="bbrBtns">Open</button>
+      </div>
+      
+      <div id="coreSelector">
+        <div>Number of cores </div> 
+        <input type="number" id="coreInput">
+        <input type="checkbox" name="shutdown" value="yes" id="shutCheck"><label for="shutCheck">Shut down my PC after rendering completion</label>
+      </div>
+      
+      <div id="bottomBtns">
+        <button class="bbrBtns" id="loadButton">Load</button>
+        <button class="bbrBtns" id="saveButton">Save</button>
+        <button class="bbrBtns" id="renderButton">Render</button>
+        <button class="bbrBtns" id="newButton">New</button>
+      </div>
+      
+      <div id="statusBar">Welcome!</div>
+      
+      <div id="renderDiv">
+        <div id="newRenderDiv">
+          <img id="renderPreview" src="assets/preview.svg"/> 
+        </div>
+        
+        <div style="margin-left: 10px;">
+          <h4 style="margin: 0;">Details:</h4>
+          <h3 id="fileNameDiplay" style="margin: 0;">your_file_name.blend</h3>
+          <h1 id="frameNumberDisplay">00000</h1>
+          <div id="currentFrame">full/path/of/the/rendered/frame.ext</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Load the application scripts -->
+    <script>
+      // Create global app namespace
+      window.app = {};
+      
+      // Initialize the application when DOM is loaded
+      document.addEventListener('DOMContentLoaded', () => {
+        // Import the required modules
+        const FileService = require('./src/renderer/services/FileService');
+        const RenderService = require('./src/renderer/services/RenderService');
+        const UIService = require('./src/renderer/services/UIService');
+        const StorageService = require('./src/renderer/services/StorageService');
+        const DialogComponent = require('./src/renderer/components/DialogComponent');
+        const TableComponent = require('./src/renderer/components/TableComponent');
+        const StatusComponent = require('./src/renderer/components/StatusComponent');
+        
+        // Initialize services
+        window.app.fileService = new FileService();
+        window.app.renderService = new RenderService();
+        window.app.uiService = new UIService();
+        window.app.storageService = new StorageService();
+        
+        // Initialize components
+        window.app.dialogComponent = new DialogComponent(window.app.fileService);
+        window.app.tableComponent = new TableComponent(
+          document.getElementById('tableTbody'),
+          window.app.fileService,
+          window.app.renderService
+        );
+        window.app.statusComponent = new StatusComponent(document.getElementById('statusBar'));
+        
+        // Set up event listeners
+        setupEventListeners();
+        
+        // Load preferences
+        const preferences = window.app.storageService.loadPreferences();
+        if (preferences.blenderSource) {
+          document.getElementById('blenderPath').value = preferences.blenderSource;
+        }
+        
+        if (preferences.savedBatFile && preferences.savedBatFile !== 'newSlate') {
+          window.app.fileService.loadBatDetails(preferences.savedBatFile);
+        }
+        
+        // Initialize UI
+        window.app.uiService.initializeUI();
+        
+        console.log('Application initialized');
+      });
+      
+      // Set up event listeners for UI elements
+      function setupEventListeners() {
+        // Browse button for Blender executable
+        document.getElementById('browseButton').addEventListener('click', () => {
+          window.app.dialogComponent.openBlenderFile();
+        });
+        
+        // Browse button for output folder
+        document.querySelector('#outPutFolderSelector #browseButton').addEventListener('click', () => {
+          window.app.dialogComponent.openOutputFolder();
+        });
+        
+        // Open folder button
+        document.getElementById('openFolderButton').addEventListener('click', () => {
+          window.app.dialogComponent.showOutputFolder();
+        });
+        
+        // Bottom buttons
+        document.getElementById('loadButton').addEventListener('click', () => {
+          window.app.fileService.loadBatFile();
+        });
+        
+        document.getElementById('saveButton').addEventListener('click', () => {
+          window.app.fileService.saveBatFile();
+        });
+        
+        document.getElementById('renderButton').addEventListener('click', () => {
+          window.app.renderService.renderBatch();
+        });
+        
+        document.getElementById('newButton').addEventListener('click', () => {
+          window.app.fileService.newSlate();
+        });
+        
+        // Shutdown checkbox
+        document.getElementById('shutCheck').addEventListener('click', () => {
+          window.app.renderService.updateShutdownOption();
+        });
+        
+        // Core input change
+        document.getElementById('coreInput').addEventListener('input', () => {
+          window.app.renderService.updateCoreCount();
+        });
+        
+        // Output path change
+        document.getElementById('outputPath').addEventListener('input', () => {
+          if (document.getElementById('outputPath').value.trim() === '') {
+            window.app.uiService.resetOutputPath();
+          }
+        });
+        
+        // Drag and drop event listeners
+        document.addEventListener('drop', (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          
+          const files = event.dataTransfer.files;
+          for (let i = 0; i < files.length; i++) {
+            if (files[i].path.endsWith('.blend')) {
+              window.app.tableComponent.addBlendFile(files[i].path);
+            }
+          }
+        });
+        
+        document.addEventListener('dragover', (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+        });
+      }
+    </script>
   </body>
-  <script src="js/variables.js"></script>
-  <script src="js/loadPreference.js"></script>
-<script src="js/buttonOperations.js"></script>
-<script src="js/tableOperations.js"></script>
-<script src="js/commonFunctions.js"></script>
- 
 </html>
