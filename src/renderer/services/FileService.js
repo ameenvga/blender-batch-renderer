@@ -7,7 +7,7 @@ const remote = require('@electron/remote');
 const fs = require('fs');
 const path = require('path');
 const dialog = remote.dialog;
-const ErrorService = require('./ErrorService').default;
+const ErrorService = require('./ErrorService');
 
 class FileService {
   constructor() {

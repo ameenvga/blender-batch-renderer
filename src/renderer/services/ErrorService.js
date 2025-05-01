@@ -242,6 +242,8 @@ class ErrorService {
     }
 }
 
-// Export singleton instance
+// Create a singleton instance
 const errorService = new ErrorService();
-export default errorService;
+
+// Export both the class and the singleton instance
+module.exports = errorService;

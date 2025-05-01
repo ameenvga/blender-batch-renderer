@@ -8,7 +8,7 @@ const FileService = require('./services/FileService');
 const RenderService = require('./services/RenderService');
 const UIService = require('./services/UIService');
 const StorageService = require('./services/StorageService');
-const ErrorService = require('./services/ErrorService').default;
+const ErrorService = require('./services/ErrorService');
 
 // Import UI components
 const TableComponent = require('./components/TableComponent');
