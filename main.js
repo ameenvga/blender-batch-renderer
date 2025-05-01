@@ -17,9 +17,10 @@ function createWindow () {
     height: 800, 
     minWidth: 400,
     webPreferences: {
-      nodeIntegration: true, // Allow Node.js APIs in renderer process
-      contextIsolation: false, // Disable context isolation for compatibility with existing code
-      enableRemoteModule: true // Enable remote module for compatibility
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true,
+      nativeWindowOpen: true
     }
   })
 
@@ -27,10 +28,10 @@ function createWindow () {
   remoteMain.enable(mainWindow.webContents)
 
   // and load the index.html of the app.
-  mainWindow.loadFile(path.join(__dirname, 'index.html'))
+  mainWindow.loadFile('index.html')
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools()
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
