@@ -5,8 +5,8 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "pack": "build --dir",
-    "dist": "build"
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
   },
   "build": {
     "appId": "com.blogspot.ameenvengara",
@@ -19,6 +19,9 @@
         "deb",
         "AppImage"
       ]
+    },
+    "mac": {
+      "target": "dmg"
     }
   },
   "repository": "",
@@ -31,10 +34,11 @@
   "author": "AmeenVGA",
   "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "^2.0.8",
-    "electron-builder": "^20.28.3"
+    "electron": "^28.2.0",
+    "electron-builder": "^24.9.1"
   },
   "dependencies": {
-    "chokidar": "^2.0.4"
+    "@electron/remote": "^2.1.2",
+    "chokidar": "^3.5.3"
   }
 }

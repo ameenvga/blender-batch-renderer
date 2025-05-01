@@ -1,5 +1,5 @@
-const remote = require('electron').remote
-var app = require('electron').remote
+const { remote } = require('@electron/remote')
+var app = remote
 var dialog = app.dialog
 const electron = require('electron')
 var fs = require('fs')

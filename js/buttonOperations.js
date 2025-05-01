@@ -172,7 +172,7 @@ function openBlenderFile () {
         
     }
 
-    const shell = require('electron').shell;
+    const { shell } = require('@electron/remote');
     const path = require('path');
 
     function renderBatch(){
@@ -182,7 +182,7 @@ function openBlenderFile () {
             updateStatus("Please save the file before rendering!", 'red')
           }else{
             if(fileReadyForRender()){
-                shell.openItem(path.join(batFilepath));
+                shell.openPath(batFilepath);
                 if(shutChecker.checked!= true){
                     updateStatus("Rendering without system shutdown.......", 'red')
                     console.log(document.getElementById('outputPath').value)
@@ -242,9 +242,9 @@ function openOutputFolder(){
 
 function showOutputFolder(){
     console.log('showOutputFolder')
-    const {shell} = require('electron') // deconstructing assignment
+    // Use the already imported shell from @electron/remote
     if(document.getElementById('outputPath').value){
-        shell.openItem(document.getElementById('outputPath').value)
+        shell.openPath(document.getElementById('outputPath').value)
     }
     
 }
